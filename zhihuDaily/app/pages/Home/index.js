@@ -11,11 +11,11 @@ import { observer, inject } from "mobx-react";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Api, Tools, Axios } from "../../utils";
 // 日报列表组件
-import StoriesList from "../../componetns/StoriesList";
+import StoriesList from "../../components/StoriesList";
 // 上滑触底加载状态
-import PullUpLoad from "../../componetns/PullUpLoading";
+import PullUpLoad from "../../components/PullUpLoading";
 // 集成触底和上拉加载的滚动容器
-import MyScrollView from "../../componetns/ScrollView";
+import MyScrollView from "../../components/ScrollView";
 // 轮播图组件
 import HomeSwiper from "./HomeSwiper";
 import { AndroidBackHandler } from "react-navigation-backhandler";

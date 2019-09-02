@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-import { System } from '../utils';
+import { System } from '../../utils';
 
 export default class HomeSwiper extends Component {
     constructor( props ) {
