@@ -11,6 +11,8 @@ import DrawerScreen from '../pages/Drawer';
 import LoginScreen from '../pages/Login';
 import SignInScreen from '../pages/Login/SignIn';
 import RegisteredScreen from "../pages/Registered";
+import DetailsScreen from '../pages/Details'
+
 import stores from '../store';
 import { View,Text } from 'react-native';
 import { inject } from "mobx-react";
@@ -34,11 +36,12 @@ const MainScreen = createStackNavigator(
         Login: LoginScreen,
         SignIn: SignInScreen,
         Registered: RegisteredScreen,
-        /* Details: {
-             screen: DetailsScreen,
-             path: "details/:id" //定义路径地址,用于路由深连接 id为参数
-             //传参示例 daily://details/3892357
-         },
+        Details: {
+            screen: DetailsScreen,
+            path: "details/:id" //定义路径地址,用于路由深连接 id为参数
+            //传参示例 daily://details/3892357
+        },
+        /*
          ImgView: ImgScreen,
          Section: SectionScreen,
          Comment: CommentScreen,

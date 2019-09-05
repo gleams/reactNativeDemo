@@ -114,6 +114,8 @@ PODS:
     - RSKImageCropper
   - RNReanimated (1.2.0):
     - React
+  - RNShare (2.0.0):
+    - React
   - RNVectorIcons (6.6.0):
     - React
   - RSKImageCropper (2.2.3)
@@ -154,6 +156,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -233,6 +236,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   yoga:
@@ -275,6 +280,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNImageCropPicker: 0a731d984e64ee4c28bddaa7ce52262e4b80979f
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
+  RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411

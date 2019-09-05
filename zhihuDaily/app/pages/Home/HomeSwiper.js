@@ -82,6 +82,7 @@ export default class HomeSwiper extends Component {
                     inactiveSlideOpacity={1}
                     inactiveSlideScale={1}
                 />
+                {this.pagination}
             </View>
         )
     }
