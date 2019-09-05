@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, AppState, InteractionManager } from "react-native";
+import { View, StyleSheet, Text, AppState,InteractionManager } from "react-native";
 import { Icon, Button } from "react-native-elements";
 import {
     Menu,
@@ -20,14 +20,15 @@ import MyScrollView from "../../components/ScrollView";
 import HomeSwiper from "./HomeSwiper";
 import { AndroidBackHandler } from "react-navigation-backhandler";
 import { DrawerActions } from 'react-navigation-drawer';
-
 let that; //保存This引用
+
+
 @inject("theme") //引入主题Store (Mobx)
 @inject("app")
 @observer //装饰器语法 , 将其转换成可观察的 (Mobx)
 export default class index extends Component {
     // 配置标题栏参数
-    static navigationOptions = ( { navigation, screenProps } ) => {
+    static navigationOptions = ({ navigation, screenProps }) => {
         return {
             title: navigation.getParam("title"),
             headerStyle: {
@@ -39,7 +40,7 @@ export default class index extends Component {
                     onPress={() => {
                         navigation.openDrawer();
                     }}
-                    icon={<Icon type="material" name="menu" size={24} color="white"/>}
+                    icon={<Icon type="material" name="menu" size={24} color="white" />}
                 />
             ),
             headerRight: (
@@ -50,7 +51,7 @@ export default class index extends Component {
                             that.toggleDateTimePicker();
                         }}
                         icon={
-                            <Icon type="antdesign" name="calendar" size={24} color="white"/>
+                            <Icon type="antdesign" name="calendar" size={24} color="white" />
                         }
                     />
                     <Button
@@ -59,7 +60,7 @@ export default class index extends Component {
                             that.handleHistoryClick();
                         }}
                         icon={
-                            <Icon type='material' name="history" size={25} color="white"/>
+                            <Icon type='material' name="history" size={25} color="white" />
                         }
                     />
                     <Button
@@ -68,15 +69,14 @@ export default class index extends Component {
                             that.tooglePopupMenu();
                         }}
                         icon={
-                            <Icon type="material" name="more-vert" size={24} color="white"/>
+                            <Icon type="material" name="more-vert" size={24} color="white" />
                         }
                     />
                 </View>
             )
         };
     };
-
-    constructor( props ) {
+    constructor(props) {
         super(props);
         this.state = {
             stories: [], //列表数据
@@ -94,7 +94,6 @@ export default class index extends Component {
         // 保存this引用
         that = this;
     }
-
     componentDidMount() {
         this.init();
         // 监听应用状态(后台运行/前台运行)
@@ -104,14 +103,13 @@ export default class index extends Component {
         this.props.navigation.setParams({ handleHistoryClick: this.handleHistoryClick });
 
     }
-
     init() {
         // 根据网络状态初始化数据
         // 连接网络时 获取最新数据 ，无网络时显示缓存的数据
         Tools.getNetworkState().then(newWorkInfo => {
-            if ( newWorkInfo.online ) {
+            if(newWorkInfo.online){
                 this.setState({
-                    refresh: true
+                    refresh:true
                 })
             }
             let syncInBackgroundState = !newWorkInfo.online;
@@ -122,12 +120,11 @@ export default class index extends Component {
                 })
                 .catch(error => {
                     this.setState({
-                        refresh: false
+                        refresh:false
                     })
                 });
         });
     }
-
     /**
      * 下拉刷新
      */
@@ -148,8 +145,8 @@ export default class index extends Component {
      * 处理首屏数据渲染
      * @oaram  {responseJson} data 数据对象
      */
-    handleDataRender( responseJson ) {
-        if ( !responseJson || !responseJson.stories ) {
+    handleDataRender(responseJson) {
+        if (!responseJson || !responseJson.stories) {
             Tools.toast("服务器数据格式异常");
             return false;
         }
@@ -165,13 +162,13 @@ export default class index extends Component {
                 {
                     topStories: responseJson.top_stories,
                     stories: data,
-                    refresh: false,
+                    refresh:false,
                     listHeight: [], //重置列表高度数组
                     finished: false,
                 },
                 () => {
                     // 当最新的日报数量较少时  触发触底加载 , 避免数据少时页面无法滚动 ,无法加载更多日报.
-                    if ( this.state.stories[0].data.length <= 3 ) {
+                    if (this.state.stories[0].data.length <= 3) {
                         this.pullupfresh();
                     }
                 }
@@ -184,8 +181,8 @@ export default class index extends Component {
      * @param {Object} lsitData 列表数据对象
      * @param {Function} callback 回调函数
      */
-    updateVistedState( listData, callback ) {
-        listData.map(( item, index ) => {
+    updateVistedState(listData, callback) {
+        listData.map((item, index) => {
             storage
                 .load({
                     key: "visited",
@@ -194,14 +191,14 @@ export default class index extends Component {
                 .then(res => {
                     // 标记已访问
                     item.visited = true;
-                    if ( index === listData.length - 1 ) {
+                    if (index === listData.length - 1) {
                         callback(listData);
                     }
                 })
                 // 未访问
                 .catch(error => {
                     item.visited = false;
-                    if ( index === listData.length - 1 ) {
+                    if (index === listData.length - 1) {
                         callback(listData);
 
                     }
@@ -214,7 +211,7 @@ export default class index extends Component {
      */
     pullupfresh = () => {
         //避免重复请求
-        if ( this.state.pullUpLoading ) {
+        if (this.state.pullUpLoading) {
             return false;
         }
         this.setState({
@@ -228,12 +225,12 @@ export default class index extends Component {
                 id: beforeDay
             })
             .then(responseJson => {
-                if ( responseJson && responseJson.stories.length == 0 ) {
+                if (responseJson && responseJson.stories.length== 0) {
                     this.setState({
                         finished: true,
                         pullUpLoading: false
                     });
-                } else if ( !responseJson || !responseJson.stories ) {
+                } else if (!responseJson || !responseJson.stories) {
                     Tools.toast("服务器数据异常");
                     this.setState({
                         pullUpLoading: false
@@ -268,33 +265,33 @@ export default class index extends Component {
      * 监听列表项点击 跳转到详情页  记录点击状态
      * @param {Object} item 列表项
      */
-    bindListTap = ( item ) => {
+    bindListTap = (item) => {
         // 页面跳转
-        let idArray = []; //日报ID数组
+        let idArray=[]; //日报ID数组
         let selectdIndex; //点击项的数组下标
-        if ( item.image ) {//根据属性判断是列表或轮播图
+        if(item.image){//根据属性判断是列表或轮播图
             //轮播图时
-            this.state.topStories.forEach(( el ) => {
+            this.state.topStories.forEach((el)=>{
                 idArray.push({
-                    id: el.id,
-                    selected: el.id == item.id ? true : false
+                    id:el.id,
+                    selected:el.id==item.id?true:false
                 })
             })
-        } else {
+        }else{
             // 列表时
-            this.state.stories.forEach(( items ) => {
-                items.data.forEach(( el ) => {
+            this.state.stories.forEach((items)=>{
+                items.data.forEach((el)=>{
                     idArray.push({
-                        id: el.id,
-                        selected: el.id == item.id ? true : false
+                        id:el.id,
+                        selected:el.id==item.id?true:false
                     })
                 })
             })
         }
         // 获取数组下标
-        idArray.forEach(( el, index ) => {
-            if ( el.id == item.id ) {
-                selectdIndex = index
+        idArray.forEach((el,index)=>{
+            if(el.id==item.id){
+                selectdIndex=index
             }
         })
         this.props.navigation.navigate("Details", {
@@ -316,7 +313,7 @@ export default class index extends Component {
                     let stories = [...this.state.stories];
                     stories.forEach(items => {
                         items.data.forEach(i => {
-                            if ( i.id == item.id ) {
+                            if (i.id == item.id) {
                                 i.visited = true;
                                 return false;
                             }
@@ -335,11 +332,11 @@ export default class index extends Component {
      *  @param {String} val 日期字符串
      *  @return {String}  格式化后的日期
      */
-    formatDate( date ) {
+    formatDate(date) {
         let currentDate = Tools.formatDay()
             .split("-")
             .join("");
-        if ( currentDate == date ) {
+        if (currentDate == date) {
             return "今日热闻";
         } else {
             return String(date).length == 8
@@ -347,24 +344,23 @@ export default class index extends Component {
                 : null;
         }
     }
-
     /**
      * 滚动监听
      * 跟随滚动位置更新Header标题
      * @param {Object} event 滚动事件
      */
 
-    bindOnScroll( event ) {
+    bindOnScroll(event) {
         // 减去标题和轮播图高度
         let y = event.nativeEvent.contentOffset.y - 230;
         let heightArr = this.state.listHeight;
-        if ( y < 0 ) {
+        if (y < 0) {
             this.props.navigation.setParams({ title: "首页" });
         } else {
             for (let i = 0; i < heightArr.length; i++) {
-                if ( heightArr[i] >= y ) {
+                if (heightArr[i] >= y) {
                     let title = this.formatDate(this.state.stories[i].key);
-                    if ( this.props.navigation.getParam({ title }) !== title ) {
+                    if (this.props.navigation.getParam({ title }) !== title) {
                         this.props.navigation.setParams({ title });
                     }
                     break;
@@ -372,17 +368,16 @@ export default class index extends Component {
             }
         }
     }
-
     /**
      * 监听列表高度变化
      * @param {Object} event 列表高度数值
      */
-    listenListHeight( event ) {
-        var { x, y, width, height } = event.nativeEvent.layout;
+    listenListHeight(event) {
+        const { x, y, width, height } = event.nativeEvent.layout;
         let heightArr = this.state.listHeight;
         heightArr.push(Number.parseInt(height));
         // 每次组件高度变化 实际上会触发两次函数 , 只取组件渲染完毕后的高度。
-        if ( heightArr.length > this.state.stories.length ) {
+        if (heightArr.length > this.state.stories.length) {
             heightArr.splice(heightArr.length - 2, 1);
         }
         this.setState({
@@ -395,32 +390,30 @@ export default class index extends Component {
      */
     handleAppStateChange = nextAppState => {
         // 当切换到后台时,更新状态
-        if ( nextAppState === "background" ) {
+        if (nextAppState === "background") {
             //切换到后台
-        } else if ( nextAppState === "active" ) {
+        } else if (nextAppState === "active") {
             // 当应用从后台切换到前台 并且仅有一页数据时 会刷新页面.
-            if ( this.state.stories.length <= 1 ) {
+            if (this.state.stories.length <= 1) {
                 this.init();
             }
         }
     };
-
     /**
      * 历史日报点击事件
      */
-    handleHistoryClick() {
+    handleHistoryClick(){
         // 生成随机日期 作者:// https://cloud.tencent.com/developer/news/391925
-        let m = new Date('October 23 , 2013 00:00:00');
-        m = m.getTime();
-        let n = new Date();
-        n = n.getTime();
-        let s = n - m;
-        s = Math.floor(Math.random() * s)
-        s = m + s;
-        s = new Date(s);
-        this.handleDatePicked(s, '随便看看');
+        let m=new Date('October 23 , 2013 00:00:00');
+        m=m.getTime();
+        let n=new Date();
+        n=n.getTime();
+        let s=n-m;
+        s=Math.floor(Math.random()*s)
+        s=m+s;
+        s=new Date(s);
+        this.handleDatePicked(s,'随便看看');
     }
-
     /**
      * 控制弹出菜单切换显示
      */
@@ -444,7 +437,7 @@ export default class index extends Component {
     /**
      *  日期选择器点击行为
      */
-    handleDatePicked = ( date, title = "" ) => {
+    handleDatePicked = (date,title="") => {
         let dateStr = Tools.formatDay(date)
             .split("-")
             .join("");
@@ -453,7 +446,7 @@ export default class index extends Component {
             title
         });
         this.setState({
-            isDateTimePickerVisible: false
+            isDateTimePickerVisible:false
         });
     };
 
@@ -462,12 +455,12 @@ export default class index extends Component {
      */
     onBackButtonPressAndroid = () => {
         //  判断侧边栏抽屉菜单是否为打开状态
-        if ( this.props.app.isDrawerOpen ) {
+        if(this.props.app.isDrawerOpen){
             this.props.navigation.closeDrawer();
             return true;
-        } else if ( this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now() ) {
+        }else  if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
             return false;
-        } else {
+        }else{
             this.lastBackPressed = Date.now();
             Tools.toast("再按一次退出应用");
             return true;
@@ -480,7 +473,7 @@ export default class index extends Component {
      */
     renderSectioHeader = items => {
         return (
-            <Text style={[styles.sectionTitle, { color: this.props.theme.colors.text }]}>
+            <Text  style={[styles.sectionTitle, { color: this.props.theme.colors.text }]} >
                 {this.formatDate(items.section.key)}
             </Text>
         );
@@ -499,6 +492,8 @@ export default class index extends Component {
     };
 
     render() {
+
+        debugger
         return (
             //  安卓返回键监听组件
             <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>
@@ -509,7 +504,7 @@ export default class index extends Component {
                     onRefresh={this.bindOnRefresh.bind(this)}
                 >
                     {/* 轮播图 */}
-                    <HomeSwiper data={this.state.topStories} onPress={this.bindListTap}/>
+                    <HomeSwiper data={this.state.topStories} onPress={this.bindListTap} />
                     {/* 日报列表 */}
                     <View onLayout={this.listenListHeight.bind(this)}>
                         <StoriesList
@@ -533,13 +528,14 @@ export default class index extends Component {
                         style={styles.popupWrapper}
                         onBackdropPress={this.tooglePopupMenu}
                     >
-                        <MenuTrigger/>
+                        <MenuTrigger />
                         <MenuOptions
                             customStyles={{
                                 optionsContainer: styles.popupOptionsContainer,
                                 optionText: styles.popupOptionText
                             }}
                         >
+
                             <MenuOption
                                 onSelect={() => {
                                     this.props.theme.switchTheme();

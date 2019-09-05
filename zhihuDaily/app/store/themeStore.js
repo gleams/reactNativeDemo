@@ -1,10 +1,10 @@
 import { action, observable } from "mobx";
-import DefaulTheme from '../theme/defaultTheme';
+import DefaultTheme from '../theme/defaultTheme';
 import BlackTheme from '../theme/blackTheme';
 
 class ThemeStore {
     constructor() {
-        this.colors = DefaulTheme;
+        this.colors = DefaultTheme;
     }
 
     @observable colors;
@@ -14,7 +14,7 @@ class ThemeStore {
         if ( this.colors.themeType === 'default' ) {
             this.colors = BlackTheme;
         } else if ( this.colors.themeType === 'black' ) {
-            this.colors = DefaulTheme;
+            this.colors = DefaultTheme;
         }
     }
 }

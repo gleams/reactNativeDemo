@@ -1,9 +1,11 @@
+//  侧栏抽屉
+
 import React, { Component } from "react";
 import { View, Text, StyleSheet,DeviceEventEmitter} from "react-native";
 import {
     SafeAreaView,
 } from "react-navigation";
-import AvatarPicker from "../../componetns/AvatarPicker";
+import AvatarPicker from "../../components/AvatarPicker";
 import { Button, Avatar } from "react-native-elements";
 import { Tools } from "../../utils";
 import { observer, inject } from "mobx-react";
@@ -81,7 +83,7 @@ class Drawer extends Component {
                             name: "测试007",
                             avatar:imgPath
                         }
-                    })
+                    });
                     Tools.toast("更换成功");
                 })
                 .catch(err => {
@@ -129,7 +131,7 @@ class Drawer extends Component {
                         />
                     ) : null}
                 </View>
-                <AvatarPicker  ref={el => (this.avatarPicker = el)}   callback={this.updateAvatar}></AvatarPicker>
+                <AvatarPicker  ref={el => (this.avatarPicker = el)}   callback={this.updateAvatar}/>
             </SafeAreaView>
         );
     }

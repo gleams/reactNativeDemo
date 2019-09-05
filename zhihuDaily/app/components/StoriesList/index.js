@@ -6,17 +6,18 @@ import {
     View
 } from 'react-native';
 import CardView from 'react-native-cardview';
-import { observer, inject } from "mobx-react";
+import { observer,inject } from "mobx-react";
 import { ListItem, Image, Icon } from "react-native-elements";
 
-@inject('theme')
+
+@inject("theme")
 @observer
-export default class Index extends Component{
-    keyExtractor = (item,index)=>item.id.toString();
-    renderHeader=info=>{
-        return(<Text style={styles.headerTitle}>{info.section.key}</Text>)
+class Index extends Component {
+    keyExtractor = ( item, index ) => item.id.toString();
+    renderHeader = info => {
+        return (<Text style={styles.headerTitle}>{info.section.key}</Text>)
     }
-    renderItem=({item,index,section})=>{
+    renderItem = ( { item, index, section } ) => {
         return (
             <CardView
                 cardElevation={1}
@@ -26,13 +27,13 @@ export default class Index extends Component{
             >
                 <ListItem
                     onPress={this.props.onPress.bind(this, item, index, section)}
-                    containerStyle={{backgroundColor:this.props.theme.colors.itemBackground}}
+                    containerStyle={{ backgroundColor: this.props.theme.colors.itemBackground }}
                     title={item.title}
                     subtitle={item.display_date ? item.display_date : null}
-                    subtitleStyle={{color:this.props.theme.colors.text}}
+                    subtitleStyle={{ color: this.props.theme.colors.text }}
                     titleStyle={[
                         styles.itemTitle,
-                        { color: item.visited ? this.props.theme.colors.visitedItem : this.props.theme.colors.item}
+                        { color: item.visited ? this.props.theme.colors.visitedItem : this.props.theme.colors.item }
                     ]}
                     stickySectionHeadersEnabled={true}
                     titleContainerStyle={styles.titleContainer}
@@ -52,7 +53,7 @@ export default class Index extends Component{
                                     </View>
                                 ) : null}
                                 <Image
-                                    source={{ uri: item.images[0]?item.images[0]:null }}
+                                    source={{ uri: item.images[0] ? item.images[0] : null }}
                                     style={{ width: 75, height: 70 }}
                                 />
                             </View>
@@ -72,7 +73,7 @@ export default class Index extends Component{
                     this.props.sectionHeader ? this.props.sectionHeader : null
                 }
                 renderItem={this.renderItem}
-                style={{backgroundColor:this.props.theme.colors.listBackground}}
+                style={{ backgroundColor: this.props.theme.colors.listBackground }}
             />
         );
     }
@@ -103,3 +104,4 @@ const styles = StyleSheet.create({
         marginLeft: 2
     }
 });
+export default Index

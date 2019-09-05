@@ -1,19 +1,21 @@
-import React,{Component} from 'react';
-import {Platform,Alert,Linking} from 'react-native';
-import {MenuProvider} from 'react-native-popup-menu';
-import {Provider,observer} from 'mobx-react';
+import React, { Component } from 'react';
+import { Platform, Alert, Linking } from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
+import { Provider, observer } from 'mobx-react';
 import stores from './store';
 import './utils/storage';
 import SplashScreen from 'react-native-splash-screen'
 import AppNavigation from './router/AppRouter';
-import RNRestart from 'react-native-restart';
+// import RNRestart from 'react-native-restart';
 import DeviceInfo from 'react-native-device-info';
-import {setJSExceptionHandler,setNativeExceptionHandler} from 'react-native-exception-handler';
-import {Axios} from "./utils";
+import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler';
+// import {Axios} from "./utils";
+
+import { View, Text } from 'react-native';
 
 const prefix = "daily://";
-const errorHandler = (e, isFatal) => {
-    if (isFatal) {
+const errorHandler = ( e, isFatal ) => {
+    if ( isFatal ) {
         Alert.alert(
             '系统错误',
             `
@@ -32,42 +34,45 @@ const errorHandler = (e, isFatal) => {
     }
 };
 
-setNativeExceptionHandler((errorString) => {
+setNativeExceptionHandler(( errorString ) => {
     //向服务器发送错误日志
-    let  errInfo={
-        '品牌':DeviceInfo.getBrand(),
-        '应用版本号':DeviceInfo.getReadableVersion(),
-        '系统版本':DeviceInfo.getSystemVersion(),
+    let errInfo = {
+        '品牌': DeviceInfo.getBrand(),
+        '应用版本号': DeviceInfo.getReadableVersion(),
+        '系统版本': DeviceInfo.getSystemVersion(),
         '是否为平板电脑': DeviceInfo.isTablet(),
-        "触发时间":new Date(),
-        '错误信息':errorString,
+        "触发时间": new Date(),
+        '错误信息': errorString,
     };
-    console.log('error',JSON.stringify(errInfo));
-   /* Axios.post("http://106.52.75.247:3000/feedback", {
-        title: '知乎日报APP错误日志',
-        content: JSON.stringify(errInfo)
-    }).then((res) => {
+    console.log('error', JSON.stringify(errInfo));
+    /* Axios.post("http://106.52.75.247:3000/feedback", {
+         title: '知乎日报APP错误日志',
+         content: JSON.stringify(errInfo)
+     }).then((res) => {
 
-    }).catch(() => {
+     }).catch(() => {
 
-    });*/
+     });*/
 });
 
-class App extends React.Component{
+class App extends Component {
     componentDidMount() {
         SplashScreen.hide()
     }
-    render(){
-        return(
+
+    render() {
+
+        return (
             <Provider {...stores}>
                 <MenuProvider>
                     <AppNavigation
                         uriPrefix={prefix}
-                        screenProps={{theme:stores.theme.colors.navBackground}}
+                        screenProps={{ theme: stores.theme.colors.navBackground }}
                     />
                 </MenuProvider>
             </Provider>
         )
     }
 }
+
 export default App;

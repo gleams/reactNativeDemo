@@ -27,6 +27,7 @@ export default class index extends Component {
     }
     //对外方法
     show = () => {
+        debugger
         this.ActionSheet.show();
     };
     bindActionSheetClick = index => {

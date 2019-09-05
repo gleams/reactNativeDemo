@@ -58,7 +58,7 @@ export default class HomeSwiper extends Component {
                     <TouchableOpacity
                         style={styles.mask}
                         activeOpacity={1}
-                        onPress={this.props.onPress.bind(this, item, index, this.props, data)}
+                        onPress={this.props.onPress.bind(this, item, index, this.props.data)}
                     >
                         <Text style={styles.title}>{item.title}</Text>
                     </TouchableOpacity>
