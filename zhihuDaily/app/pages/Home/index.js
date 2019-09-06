@@ -492,8 +492,6 @@ export default class index extends Component {
     };
 
     render() {
-
-        debugger
         return (
             //  安卓返回键监听组件
             <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>

@@ -6,7 +6,8 @@
 
           问题讨论 :
           https://github.com/archriss/react-native-snap-carousel/issues/538
-  */}
+  */
+}
 import React, { Component } from "react";
 import {
     View,
@@ -16,7 +17,7 @@ import {
     TouchableOpacity,
     Image,
     Linking,
-    InteractionManager
+
 } from "react-native";
 import { Icon, Button } from "react-native-elements";
 import AutoHeightWebView from "react-native-autoheight-webview";
@@ -24,10 +25,13 @@ import LinearGradient from "react-native-linear-gradient";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
 import { Container } from "native-base";
 import Share from "react-native-share";
+import WebView from 'react-native-webview';
 import * as Animatable from "react-native-animatable";
 import { observer, inject } from "mobx-react";
 import { Tools, Api, Axios, System } from "../../utils";
 import Carousel from "react-native-snap-carousel";
+
+
 const IMG_MAX_HEIGHT = 200; //图像最大高度
 const HEAD_HEIGHT = 50; //导航栏(Header)高度
 const HEADER_MIN_HEIGHT = 0; //导航栏最小高度
@@ -36,14 +40,14 @@ let offsetY = 0; // 记录Y轴坐标
 let that; //保存this引用
 @inject("theme")
 @observer
-export default class index extends Component {
-    static navigationOptions = ({ navigation, screenProps }) => {
+export default class extends Component {
+    static navigationOptions = ( { navigation, screenProps } ) => {
         const { params } = navigation.state;
         return {
             headerTransparent: true,
             gesturesEnabled: false,
             headerStyle: {
-                height: params.height ? params.height : HEAD_HEIGHT,
+                // height: params.height ? params.height : HEAD_HEIGHT,
                 backgroundColor: screenProps.theme,
                 opacity: params.opacity,
                 overflow: "hidden"
@@ -56,7 +60,7 @@ export default class index extends Component {
                         onPress={() => {
                             that.openShare();
                         }}
-                        icon={<Icon type="material" name="share" size={24} color="white" />}
+                        icon={<Icon type="material" name="share" size={24} color="white"/>}
                     />
                     {/* 收藏 */}
                     <Button
@@ -87,7 +91,7 @@ export default class index extends Component {
                         titleStyle={styles.headerRightButton}
                         type="clear"
                         onPress={() => {
-                            if (params.extra) {
+                            if ( params.extra ) {
                                 navigation.navigate("Comment", {
                                     id: navigation.getParam("idArray")[that.state.activeIndex].id,
                                     comments: params.extra.comments,
@@ -97,7 +101,7 @@ export default class index extends Component {
                             }
                         }}
                         icon={
-                            <Icon type="material" name="comment" size={24} color="white" />
+                            <Icon type="material" name="comment" size={24} color="white"/>
                         }
                     />
                     {/* 点赞 */}
@@ -132,7 +136,8 @@ export default class index extends Component {
             )
         };
     };
-    constructor(props) {
+
+    constructor( props ) {
         super(props);
         this.scrollY = new Animated.Value(0); // 记录Y轴滚动坐标 用户计算滚动方向
         this.state = {
@@ -164,6 +169,7 @@ export default class index extends Component {
         this.props.navigation.setParams({ opacity: opacity });
         that = this;
     }
+
     componentDidMount() {
         try {
             this.init(this.state.idArray[this.state.silderFristItem].id);
@@ -171,15 +177,16 @@ export default class index extends Component {
             Tools.toast("日报参数异常");
         }
     }
+
     /*
      *  日报内容初始化
      *
      *    详情页 首次打开时 WebView初始化会占用大量性能 ,
      *    导致页面push动画丢帧 , 通过判断状态延缓WebView加载.
      */
-    init(id) {
+    init( id ) {
         //避免用户急速滑动切换
-        if (this.state.webviewInit !== null && !this.state.webviewInit) {
+        if ( this.state.webviewInit !== null && !this.state.webviewInit ) {
             return false;
         } else {
             this.setState({
@@ -190,7 +197,7 @@ export default class index extends Component {
         this.getDailyData(id);
         // 检查网络状态 只有在连接网络下才加载评论
         Tools.getNetworkState().then(newWorkInfo => {
-            if (newWorkInfo.online) {
+            if ( newWorkInfo.online ) {
                 this.getExtraData(id);
             }
         });
@@ -200,7 +207,7 @@ export default class index extends Component {
                 key: "bigSize"
             })
             .then(res => {
-                if (res) {
+                if ( res ) {
                     this.setState({
                         bigSize: true
                     });
@@ -208,12 +215,13 @@ export default class index extends Component {
             })
             .catch(err => []);
     }
+
     /*
      * 日报数据初始化
      *    详情页 首次打开时 WebView初始化会占用大量性能 ,
      *    导致页面push动画丢帧 , 通过判断状态延缓WebView加载.
      */
-    getDailyData(id) {
+    getDailyData( id ) {
         storage
             .load({
                 key: "details",
@@ -221,7 +229,7 @@ export default class index extends Component {
             })
             .then(response => {
                 console.log(response)
-                if (!response || !response.body) {
+                if ( !response || !response.body ) {
                     Tools.toast("服务器数据异常");
                     return false;
                 }
@@ -244,7 +252,7 @@ export default class index extends Component {
                     return renderHtml;
                 };
                 // 用户为平板设备时不裁切Html且HMTL内容长度大于850时
-                if (System.SCREEN_WIDTH >= 768 && response.body.length > 900) {
+                if ( System.SCREEN_WIDTH >= 768 && response.body.length > 900 ) {
                     html = response.body;
                 } else {
                     html = response.body.slice(0, 900);
@@ -266,44 +274,48 @@ export default class index extends Component {
                 });
             });
     }
+
     // 日报额外信息  (评论数,点赞数等)
-    getExtraData(id) {
+    getExtraData( id ) {
         storage
             .load({
                 key: "extra",
                 id: id
             })
             .then(res => {
-                if (res) {
+                if ( res ) {
                     this.props.navigation.setParams({ extra: res });
                     this.setState({
                         extra: res
                     });
                 }
             })
-            .catch(() => {});
+            .catch(() => {
+            });
     }
 
     /*
      * 接受并处理Webview发送的信息
      * @param {Object} event 消息事件对象
      */
-    bindMessage(event) {
+    bindMessage( event ) {
         let data = event.nativeEvent.data;
-        if (String(data).indexOf("img:") !== -1) {
+
+        if ( String(data).indexOf("img:") !== -1 ) {
             let imgUrl = data.split("img:")[1].replace('"', "");
             this.props.navigation.navigate("ImgView", {
                 url: imgUrl
             });
-        } else if (String(data).indexOf("init:") !== -1) {
+        } else if ( String(data).indexOf("init:") !== -1 ) {
             this.setState({ webviewInit: true });
-        } else if (String(data).indexOf("a:") !== -1) {
+        } else if ( String(data).indexOf("a:") !== -1 ) {
             let src = data.split("a:")[1].replace('"', "");
             Linking.openURL(src).catch(err => {
                 Tools.toast("无法打开浏览器了..");
             });
         }
     }
+
     /**
      *  系统分享弹窗
      */
@@ -325,16 +337,16 @@ export default class index extends Component {
         let y = event.nativeEvent.contentOffset.y;
         let direction = y > offsetY ? "down" : "up";
         offsetY = y;
-        if (y <= IMG_MAX_HEIGHT) {
+        if ( y <= IMG_MAX_HEIGHT ) {
             this.state.headerHeight.setValue(HEAD_HEIGHT);
         } else {
-            if (direction == "down") {
-                if (tempHeight <= HEAD_HEIGHT) {
+            if ( direction == "down" ) {
+                if ( tempHeight <= HEAD_HEIGHT ) {
                     this.state.headerHeight.setValue(HEADER_MIN_HEIGHT);
                     tempHeight = HEADER_MIN_HEIGHT;
                 }
-            } else if (direction == "up") {
-                if (tempHeight == HEADER_MIN_HEIGHT) {
+            } else if ( direction == "up" ) {
+                if ( tempHeight == HEADER_MIN_HEIGHT ) {
                     this.state.headerHeight.setValue(HEAD_HEIGHT);
                     tempHeight = HEAD_HEIGHT;
                 }
@@ -350,16 +362,17 @@ export default class index extends Component {
             title: this.state.daily.section.name
         });
     };
+
     /**
      * 处理收藏与点赞点击事件(静态模拟无实际功能)
      * @param {String} type 区分收藏和点赞
      */
-    bindHeaderBtnTap(type) {
+    bindHeaderBtnTap( type ) {
         let extra = that.state.extra;
-        if (!extra.popularity) {
+        if ( !extra.popularity ) {
             return;
-        } else if (type === "like") {
-            if (!that.state.like) {
+        } else if ( type === "like" ) {
+            if ( !that.state.like ) {
                 that.popularityView.tada(800);
                 Tools.toast("+1");
                 extra.popularity += 1;
@@ -378,7 +391,7 @@ export default class index extends Component {
                     });
                 }
             );
-        } else if (type === "collect") {
+        } else if ( type === "collect" ) {
             that.collectView.bounceIn(800);
             that.setState(
                 {
@@ -391,7 +404,7 @@ export default class index extends Component {
         }
     }
 
-    renderSilder = (data, index) => {
+    renderSilder = ( data, index ) => {
         return (
             <View style={{ flex: 1 }}>
                 {data.item.selected ? (
@@ -411,7 +424,7 @@ export default class index extends Component {
                         parallaxHeaderHeight={250}
                         renderBackground={this.renderSectioHeader}
                     >
-                        <AutoHeightWebView
+                        <WebView
 
                             style={{ height: this.state.webViewHeight }}
                             onSizeUpdated={size => {
@@ -423,29 +436,31 @@ export default class index extends Component {
                             // 禁止视频自动播放
                             mediaPlaybackRequiresUserAction={true}
                             onMessage={this.bindMessage.bind(this)}
+                            javaScriptEnabled={true}
                             // 为webview图片绑定点击事件 , 触发查看大图
-                            customScript={`
-              window.onload=function(){
-              window.ReactNativeWebView.postMessage(JSON.stringify("init:true"));
-              var imgs = document.getElementsByTagName("img");
-              if(imgs){
-                for(var i=0;i<imgs.length;i++){
-                  imgs[i].addEventListener('click',function(e){
-                    window.ReactNativeWebView.postMessage(JSON.stringify("img:"+this.src));
-                  })
-                }
-              }
-              var a = document.getElementsByTagName('a');
-              if(a){
-                for(var i = 0; i < a.length; i++){
-                a[i].onclick = function (event) {
-                  window.ReactNativeWebView.postMessage(JSON.stringify("a:"+this.href));
-                  event.preventDefault();
-                }
-              }
-            }
-          }
-         `}
+                            injectedJavaScript={`
+                                      window.onload=function(){
+                                      window.ReactNativeWebView.postMessage(JSON.stringify("init:true"));
+                                      
+                                      var imgs = document.getElementsByTagName("img");
+                                      if(imgs){
+                                        for(var i=0;i<imgs.length;i++){
+                                          imgs[i].addEventListener('click',function(e){
+                                            window.ReactNativeWebView.postMessage(JSON.stringify("img:"+this.src));
+                                          })
+                                        }
+                                      }
+                                      var a = document.getElementsByTagName('a');
+                                      if(a){
+                                        for(var i = 0; i < a.length; i++){
+                                        a[i].onclick = function (event) {
+                                          window.ReactNativeWebView.postMessage(JSON.stringify("a:"+this.href));
+                                          event.preventDefault();
+                                        }
+                                      }
+                                    }
+                                  }
+                                 `}
                         />
 
                         {/* 栏目信息  */}
@@ -511,6 +526,7 @@ export default class index extends Component {
             </Animated.View>
         );
     };
+
     render() {
         return (
             <Container
@@ -527,7 +543,7 @@ export default class index extends Component {
                     }}
                     firstItem={this.state.silderFristItem}
                     initialScrollIndex={this.state.silderFristItem}
-                    getItemLayout={(data, index) => ({
+                    getItemLayout={( data, index ) => ({
                         length: System.SCREEN_WIDTH,
                         offset: System.SCREEN_WIDTH * index,
                         index
@@ -548,12 +564,12 @@ export default class index extends Component {
                             previousIndex > this.carousel.currentIndex ? "right" : "left";
                         let i;
                         let ary = this.state.idArray;
-                        this.state.idArray.forEach((item, index) => {
-                            if (item.selected) {
+                        this.state.idArray.forEach(( item, index ) => {
+                            if ( item.selected ) {
                                 i = index;
                             }
                         });
-                        if (swipeDirection == "left") {
+                        if ( swipeDirection == "left" ) {
                             ary[i - 1].selected = true;
                             storage.save({
                                 key: "visited",
@@ -561,7 +577,7 @@ export default class index extends Component {
                                 data: true,
                                 expires: null
                             });
-                        } else if (swipeDirection == "right") {
+                        } else if ( swipeDirection == "right" ) {
                             ary[i + 1].selected = true;
                             storage.save({
                                 key: "visited",
@@ -597,9 +613,9 @@ export default class index extends Component {
                                 swipeDirection == "left"
                                     ? this.init(this.state.idArray[i - 1].id)
                                     : this.init(this.state.idArray[i + 1].id);
-                                if (previousIndex === 0) {
+                                if ( previousIndex === 0 ) {
                                     Tools.toast("当前为第一项");
-                                } else if (previousIndex == this.state.idArray.length - 1) {
+                                } else if ( previousIndex == this.state.idArray.length - 1 ) {
                                     Tools.toast("当前为最后一项");
                                 }
                             }
@@ -610,6 +626,7 @@ export default class index extends Component {
         );
     }
 }
+
 
 const styles = StyleSheet.create({
     fill: {
