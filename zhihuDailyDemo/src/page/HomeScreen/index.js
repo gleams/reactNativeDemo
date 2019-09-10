@@ -1,26 +1,27 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { Api, Axios } from '../../utils';
+import StoriesList from '../../components/StoriesList';
 
 export default class extends React.Component {
+    state = {
+        stories: []
+    };
+
+    componentDidMount() {
+        Axios.get(Api.latest).then(( { data: { stories } } ) => {
+            this.setState({
+                stories
+            })
+        })
+    }
+
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', }}>
-                <Text>
-                    Home
-                </Text>
-                <Button
-                    title={'openDrawer'}
-                    onPress={() => {
-                        this.props.navigation.openDrawer();
-                    }}
-                />
-                <Button
-                    title={'detail'}
-                    onPress={() => {
-                        this.props.navigation.navigate('DetailScreen')
-                    }}
-                />
-            </View>
+            <StoriesList
+                data={this.state.stories}
+            >
+
+            </StoriesList>
         )
     }
 }

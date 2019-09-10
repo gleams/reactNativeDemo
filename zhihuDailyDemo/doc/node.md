@@ -9,6 +9,9 @@
 5. genymotion v3.0.2
 
 
+## 开发前注意事项
+1. 组件在需要时才安装，不要一次安装过多组件，这样配置起来很繁琐，容易出错。
+2. 安装完组件后把`bundler`窗口关闭，然后重新`react-native run-*`启动项目，重新编译打包。
 
 ## 一.项目初始化
 
@@ -88,6 +91,15 @@ utils 公共工具
 ## 定义路由
 1. 注意事项
     1. 定义路由要特别注意，路由外层不要使用View，SafeAreaView之类的组件包裹，否则看不到页面。
-    
+完整代码参考[Tag_1](https://github.com/gleams/reactNativeDemo/tree/tag_1/zhihuDailyDemo)  
+
+## 准备会用到的工具
+1. `axios` 的 HTTP 请求库
+2. `moment`时间工具
+3. `react-native-root-toast` 消息提示组件
+
+根据需要封装项目需要的http工具
+
+ 
 
 
