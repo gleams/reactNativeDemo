@@ -17,6 +17,15 @@ class HomeSwiper extends Component {
             activeSlide: 0
         }
     }
+    get pagination(){
+        return(
+            <Pagination
+                dotsLength={this.props.data.length}
+                activeDotIndex={}
+
+            />
+        )
+    }
 }
 
 export default HomeSwiper;
